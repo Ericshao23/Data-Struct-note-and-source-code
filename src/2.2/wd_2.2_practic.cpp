@@ -4,34 +4,34 @@
 #include<cstdio>
 
 using namespace std;
-// // 将数组ab得到数组ba(a表示数组中的前p个元素，b表示数组中剩余的n-p个元素)
-// // 求逆
-// void Reverse(int R[], int begin, int end){
-//     int i, temp;
-//     for(i = 0; i < (end - begin) / 2; i++){
-//         temp = R[begin + i];
-//         R[begin + i] = R[end - i];
-//         R[end -i] = temp;
-//     }
-// }
+// 将数组ab得到数组ba(a表示数组中的前p个元素，b表示数组中剩余的n-p个元素)
+// 求逆
+void Reverse(int R[], int begin, int end){
+    int i, temp;
+    for(i = 0; i < (end - begin) / 2; i++){
+        temp = R[begin + i];
+        R[begin + i] = R[end - i];
+        R[end -i] = temp;
+    }
+}
 
-// //数组左移p位
-// void Converse(int R[], int n, int p){
-//     Reverse(R, 0, p - 1);
-//     Reverse(R, p, n - 1);
-//     Reverse(R, 0, n - 1);
-// }
+//数组左移p位
+void Converse(int R[], int n, int p){
+    Reverse(R, 0, p - 1);
+    Reverse(R, p, n - 1);
+    Reverse(R, 0, n - 1);
+}
 
 
-// int main(){
-//     int p;
-//     cin>>p;
-//     int R[7] = {1,2,3,4,5,6,7};
-//     Converse(R, 7, 4);
-//     for(int i = 0; i < 7; i++){
-//         cout<<R[i]<<endl;
-//     }
-// }
+int main(){
+    int p;
+    cin>>p;
+    int R[7] = {1,2,3,4,5,6,7};
+    Converse(R, 7, 4);
+    for(int i = 0; i < 7; i++){
+        cout<<R[i]<<endl;
+    }
+}
 
 // 【2011 年统考真题】
 // 求两个等长升序序列A和B的中位数
@@ -98,4 +98,55 @@ int main(){
     int A[5] = {2, 4, 6, 8, 20};
     int B[5] = {11, 13, 15, 17, 19};
     cout<<M_search_opt(A, B, 5);
+}
+
+// 【2020年统考真题】 
+// I:a=b=c时，距离最小
+// II:不妨假设a<=b<=c,则|a-b|+|b-c|+|c-a|=2(c-a)
+//#define INT_MAX 0x7fffffff
+int abs_(int a){
+    if(a<0){
+        return -a;
+    }
+    else{
+        return a;
+    }
+}
+
+bool xls_min(int a, int b, int c){
+    if(a <= b && a <= c){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
+int findMinofTrip(int A[], int n, int B[], int m, int C[], int p){
+    int i = 0, j = 0, k = 0, D_min = INT_MAX;
+    while(i < n && j < m && k < p && D_min > 0){
+        int D = abs_(A[i] - B[j]) + abs_(B[j]-C[k]) + abs_(C[k] - A[i]);
+        if(D < D_min){
+            D_min = D;
+        }
+        if (xls_min(A[i], B[j], C[k])){
+            i++;
+        }
+        else{
+            if(xls_min(B[j], C[k], A[i])){
+                j++;
+            }
+            else{
+                k++;
+            }
+        }
+    }
+    return D_min;
+}
+
+int main(){
+    int S1[3] = {-1, 0, 9};
+    int S2[4] = {-25, -10, 10, 11};
+    int S3[5] = {2, 9, 17, 30, 41};
+    cout<<findMinofTrip(S1, 3, S2, 4, S3, 5);
 }
